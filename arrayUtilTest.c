@@ -103,3 +103,23 @@ void test_findIndex_should_return_negative_1_in_array_if_not_found(){
 	assertEqual(findIndex(util, &y),-1);
 	dispose(util);
 }
+
+int match_Func(void* hint, void* item){
+	char* _hint = (char*)hint;
+	char* _item = (char*)item;
+	return *_hint == *_item ? 1 : 0;
+}
+
+void test_findFirst_should_return_first_element_which_matches_in_array(){
+	char array[6] = {'a','e','i','o','u','a'};
+	char x = 'a';
+	char* x_ptr = &x;
+	ArrayUtil util;
+	char *result;
+	MatchFunc *match = &match_Func;
+	util.typeSize = sizeof(char);
+	util.length = 6;
+	util.base = array;
+	result = (char*)findFirst(util,match,(void*)x_ptr);
+	assertEqual(*result,'a');
+}

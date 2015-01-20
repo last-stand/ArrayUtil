@@ -57,3 +57,14 @@ void dispose(ArrayUtil util){
 	util.base = 0;
 	free((void *)util.base);
 }
+
+void* findFirst(ArrayUtil util, MatchFunc* match, void* hint){
+	char *array = util.base;
+	int i;
+	for(i=0;i<util.length;i++){
+		if(match(hint,(void*)(&array[i]))){
+			return (void*)&array[i];
+		}
+	}
+	return NULL;
+}
