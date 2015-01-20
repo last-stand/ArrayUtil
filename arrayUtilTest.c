@@ -123,3 +123,15 @@ void test_findFirst_should_return_first_element_which_matches_in_array(){
 	result = (char*)findFirst(util,match,(void*)x_ptr);
 	assertEqual(*result,'a');
 }
+
+void test_findFirst_should_return_NULL_if_nothing_matches_in_array(){
+	char array[5] = {'a','e','i','o','u'};
+	char x = 'x';
+	char* x_ptr = &x;
+	ArrayUtil util;
+	MatchFunc *match = &match_Func;
+	util.typeSize = sizeof(char);
+	util.length = 5;
+	util.base = array;
+	assertEqual((int)findFirst(util,match,(void*)x_ptr),(int)NULL);
+}
