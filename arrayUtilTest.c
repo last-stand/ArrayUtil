@@ -77,3 +77,24 @@ void test_resize_returns_structure_with_new_allocated_space(){
 	assertEqual(resizeArray[5],0);
 }
 
+void test_findIndex_should_return_index_of_the_element_in_array_if_found(){
+	int array[6] = {4,2,1,5,6,0};
+	int x = 5,y = 0;
+	ArrayUtil util;
+	util.typeSize = sizeof(int);
+	util.length = 6;
+	util.base = array;
+	assertEqual(findIndex(util, &x),3);
+	assertEqual(findIndex(util, &y),5);
+}
+
+void test_findIndex_should_return_negative_1_in_array_if_not_found(){
+	int array[6] = {4,2,1,5,6,0};
+	int x = 7,y=9;
+	ArrayUtil util;
+	util.typeSize = sizeof(int);
+	util.length = 6;
+	util.base = array;
+	assertEqual(findIndex(util, &x),-1);
+	assertEqual(findIndex(util, &y),-1);
+}

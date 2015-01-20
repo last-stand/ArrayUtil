@@ -1,6 +1,5 @@
 revisionTestRunner.c
 revisionTestRunner.exe
-arrayUtil.c
 arrayUtil.o
 arrayUtil.exe
 arrayUtilTest.o
