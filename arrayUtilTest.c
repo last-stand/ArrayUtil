@@ -135,3 +135,35 @@ void test_findFirst_should_return_NULL_if_nothing_matches_in_array(){
 	util.base = array;
 	assertEqual((int)findFirst(util,match,(void*)x_ptr),(int)NULL);
 }
+
+int isDivisible(void* hint, void* item){
+	int* _hint = (int*)hint;
+	int* _item = (int*)item;
+	return (*_item % *_hint) == 0 ? 1 : 0;
+}
+
+void test_findLast_should_return_last_element_which_matches_in_array(){
+	int array[6] = {1,6,4,5,9,11};
+	int x = 3;
+	int* x_ptr = &x;
+	ArrayUtil util;
+	int *result;
+	MatchFunc *match = &isDivisible;
+	util.typeSize = sizeof(int);
+	util.length = 6;
+	util.base = array;
+	result = (int*)findLast(util,match,(void*)x_ptr);
+	assertEqual(*result,9);
+}
+
+void test_findLast_should_return_NULL_if_nothing_matches_in_array(){
+	int array[6] = {1,6,4,5,9,11};
+	int x = 7;
+	int* x_ptr = &x;
+	ArrayUtil util;
+	MatchFunc *match = &isDivisible;
+	util.typeSize = sizeof(int);
+	util.length = 6;
+	util.base = array;
+	assertEqual((int)findLast(util,match,(void*)x_ptr),(int)NULL);
+}

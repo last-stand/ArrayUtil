@@ -68,3 +68,14 @@ void* findFirst(ArrayUtil util, MatchFunc* match, void* hint){
 	}
 	return NULL;
 }
+
+void* findLast(ArrayUtil util, MatchFunc* match, void* hint){
+	int *array = util.base;
+	int i,*element = NULL;
+	for(i=0;i<util.length;i++){
+		if(match(hint,(void*)(&array[i]))){
+			element = (void*)&array[i];
+		}
+	}
+	return element;
+}
