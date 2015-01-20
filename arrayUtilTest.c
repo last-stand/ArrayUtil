@@ -1,5 +1,6 @@
 #include "expr_assert.h"
 #include "arrayUtil.h"
+#include <stdlib.h>
 
 void test_array_util_areEqual_returns_1_if_both_array_are_equal_in_length_and_elements(){
 	int a[]={1,2,3,4,5};
@@ -75,6 +76,8 @@ void test_resize_returns_structure_with_new_allocated_space(){
 	assertEqual(resizeArray[3],4);
 	assertEqual(resizeArray[4],0);
 	assertEqual(resizeArray[5],0);
+	dispose(previousArray);
+	dispose(new_Array);
 }
 
 void test_findIndex_should_return_index_of_the_element_in_array_if_found(){
@@ -86,6 +89,7 @@ void test_findIndex_should_return_index_of_the_element_in_array_if_found(){
 	util.base = array;
 	assertEqual(findIndex(util, &x),3);
 	assertEqual(findIndex(util, &y),5);
+	dispose(util);
 }
 
 void test_findIndex_should_return_negative_1_in_array_if_not_found(){
@@ -97,4 +101,5 @@ void test_findIndex_should_return_negative_1_in_array_if_not_found(){
 	util.base = array;
 	assertEqual(findIndex(util, &x),-1);
 	assertEqual(findIndex(util, &y),-1);
+	dispose(util);
 }

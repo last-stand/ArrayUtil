@@ -18,7 +18,7 @@ int areEqual(ArrayUtil a, ArrayUtil b){
 }
 
 ArrayUtil create(int typeSize, int length){
-	int * array = calloc(length,typeSize);
+	void * array = calloc(length,typeSize);
 	ArrayUtil new_array;
 	new_array.length = length;
 	new_array.typeSize = typeSize;
@@ -49,4 +49,11 @@ int findIndex(ArrayUtil util, void* element){
 			return i;
 	}
 	return -1;
+}
+
+void dispose(ArrayUtil util){
+	util.typeSize = 0;
+	util.length = 0;
+	util.base = 0;
+	free((void *)util.base);
 }
