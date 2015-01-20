@@ -3,3 +3,6 @@ revisionTestRunner.exe
 arrayUtil.c
 arrayUtil.o
 arrayUtil.exe
+arrayUtilTest.o
+arrayUtilTestRunner.c
+arrayUtilTestRunner.exe
