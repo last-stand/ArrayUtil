@@ -12,3 +12,4 @@ void dispose(ArrayUtil);
 typedef int (MatchFunc)(void *, void *);
 void* findFirst(ArrayUtil, MatchFunc*, void*);
 void* findLast(ArrayUtil, MatchFunc*, void*);
+int count(ArrayUtil ,MatchFunc*, void*);

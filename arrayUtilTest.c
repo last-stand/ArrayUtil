@@ -38,27 +38,49 @@ void test_array_util_areEqual_returns_0_if_both_array_are_not_equal_in_length_an
 	assertEqual(areEqual(a_array, b_array),0);
 }
 
-void test_create_should_return_structure_with_given_typeSize(){
+void test_create_should_returns_array_within_structure_with_given_typeSize(){
 	ArrayUtil newArray = create(sizeof(int),5);
 	assertEqual(newArray.typeSize,sizeof(int));
 }
 
-void test_create_should_return_structure_with_given_length(){
+void test_create_should_returns_array_within_structure_with_given_length(){
 	ArrayUtil newArray = create(sizeof(int),5);
 	assertEqual(newArray.length,5);
 }
 
-void test_create_should_return_structure_with_array_initialized_each_element_with_0(){
-	ArrayUtil newArray = create(sizeof(int),5);
-	int *array = newArray.base;
-	assertEqual((int)array[0],0);
-	assertEqual((int)array[1],0);
-	assertEqual((int)array[2],0);
-	assertEqual((int)array[3],0);
-	assertEqual((int)array[4],0);
+void test_create_allocates_space_for_INT_array_and_assigns_zero_to_all_bytes(){
+	ArrayUtil util = create(sizeof(int),4);
+	char intArray[] = {0,0,0,0};
+	ArrayUtil expectedUtil;
+	expectedUtil.base = intArray;
+	expectedUtil.typeSize = 4;
+	expectedUtil.length = 4;
+	assertEqual(areEqual(expectedUtil,util),1);
 }
 
-void test_resize_returns_structure_with_new_allocated_space(){
+void test_create_allocates_space_for_CHAR_array_and_assigns_zero_to_all_bytes(){
+	char charArray[] = {0,0,0,0};
+	ArrayUtil expectedUtil;
+	ArrayUtil util;
+	expectedUtil.base = charArray;
+	expectedUtil.typeSize = 1;
+	expectedUtil.length = 4;
+	util = create(sizeof(char),4);
+	assertEqual(areEqual(expectedUtil,util),1);
+}
+
+void test_create_allocates_space_for_FLOAT_array_and_assigns_zero_to_all_bytes(){
+	float charArray[] = {0,0,0,0};
+	ArrayUtil expectedUtil;
+	ArrayUtil util;
+	expectedUtil.base = charArray;
+	expectedUtil.typeSize = 4;
+	expectedUtil.length = 4;
+	util = create(sizeof(float),4);
+	assertEqual(areEqual(expectedUtil,util),1);
+}
+
+void test_resize_returns_array_within_structure_with_new_allocated_space(){
 	int array[] = {1,2,3,4};
 	int *resizeArray;
 	ArrayUtil previousArray;
@@ -167,3 +189,5 @@ void test_findLast_should_return_NULL_if_nothing_matches_in_array(){
 	util.base = array;
 	assertEqual((int)findLast(util,match,(void*)x_ptr),(int)NULL);
 }
+
+//void test_count(){}

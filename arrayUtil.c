@@ -4,15 +4,14 @@
 #include "arrayUtil.h"
 
 int areEqual(ArrayUtil a, ArrayUtil b){
-	int i=0;
-	int *a_array = (int*)a.base;
-	int *b_array = (int*)b.base;
-	if(a.length != b.length)
+	int i;
+	char *a_array = (char*)a.base;
+	char *b_array = (char*)b.base;
+	if(a.length != b.length || a.typeSize != b.typeSize)
 		return 0;
-	while(i < a.length){
+	for(i=0;i<a.length;i++){
 		if(a_array[i] != b_array[i])
-			return 0;;
-		++i;
+			return 0;
 	}
 	return 1;
 }
