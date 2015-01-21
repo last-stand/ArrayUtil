@@ -26,13 +26,11 @@ ArrayUtil create(int typeSize, int length){
 }
 
 ArrayUtil resize(ArrayUtil util, int length) {
-	int *old_array = (int *)(util.base);
+	int i, *old_array = util.base;
 	int *array = calloc(length,util.typeSize);
-	int i=0;
-	while(i<length){
+	for(i=0;i<length;i++){
 		if(i < util.length)
-			array[i]=old_array[i];
-		i++;
+			array[i] = old_array[i];
 	}
 	util.base = array;
 	util.length = length;
@@ -40,12 +38,12 @@ ArrayUtil resize(ArrayUtil util, int length) {
 }
 
 int findIndex(ArrayUtil util, void* element){
-	int *array = (int*)util.base;
-	int i;
+	int *array = util.base;
+	int i,*item;
 	int element_to_search = *(int*)element;
 	for(i=0;i<util.length;i++){
-		if(array[i] == element_to_search)
-			return i;
+		item = util.base+util.typeSize*i;
+		if(*item == element_to_search) return i;
 	}
 	return -1;
 }
@@ -59,10 +57,11 @@ void dispose(ArrayUtil util){
 
 void* findFirst(ArrayUtil util, MatchFunc* match, void* hint){
 	char *array = util.base;
-	int i;
+	int i,*element;
 	for(i=0;i<util.length;i++){
-		if(match(hint,(void*)(&array[i]))){
-			return (void*)&array[i];
+		element = util.base+util.typeSize*i;
+		if(match(hint, element)){
+			return (void*)util.base + (i * util.typeSize);
 		}
 	}
 	return NULL;
@@ -70,11 +69,20 @@ void* findFirst(ArrayUtil util, MatchFunc* match, void* hint){
 
 void* findLast(ArrayUtil util, MatchFunc* match, void* hint){
 	int *array = util.base;
-	int i,*element = NULL;
-	for(i=0;i<util.length;i++){
-		if(match(hint,(void*)(&array[i]))){
-			element = (void*)&array[i];
+	int i,*element;
+	for(i=util.length-1;i>=0;i--){
+		element = util.base+util.typeSize*i;
+		if(match(hint,element)){
+			return (void*)util.base + (i*util.typeSize);
 		}
 	}
-	return element;
+	return NULL;
+}
+
+int count(ArrayUtil util, MatchFunc* match, void* hint){
+	int i,count = 0;
+	for(i=0;i<util.length;i++){
+		count +=  match(hint, util.base + (i*util.typeSize));
+	}
+	return count;
 }
