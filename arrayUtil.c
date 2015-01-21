@@ -27,7 +27,7 @@ ArrayUtil create(int typeSize, int length){
 
 ArrayUtil resize(ArrayUtil util, int length) {
 	int *old_array = (int *)(util.base);
-	int *array = calloc(length,sizeof(util.typeSize));
+	int *array = calloc(length,util.typeSize);
 	int i=0;
 	while(i<length){
 		if(i < util.length)
