@@ -26,21 +26,21 @@ ArrayUtil create(int typeSize, int length){
 }
 
 ArrayUtil resize(ArrayUtil util, int length) {
-	int i, *old_array = util.base;
-	int *array = calloc(length,util.typeSize);
-	for(i=0;i<length;i++){
-		if(i < util.length)
-			array[i] = old_array[i];
-	}
-	util.base = array;
-	util.length = length;
+	char *previousArray = (char *)(util.base);
+	char *resizedArray = calloc(length,util.typeSize);
+	if(util.typeSize*length > util.typeSize*util.length)
+		memcpy(resizedArray, previousArray, util.typeSize*util.length);
+	else
+		memcpy(resizedArray, previousArray, util.typeSize*length);
+	util.base = resizedArray;
+	util.length=length;
 	return util;
 }
 
 int findIndex(ArrayUtil util, void* element){
-	int *array = util.base;
-	int i,*item;
-	int element_to_search = *(int*)element;
+	char *array = util.base,*item;
+	int i;
+	char element_to_search = *(char*)element;
 	for(i=0;i<util.length;i++){
 		item = util.base+util.typeSize*i;
 		if(*item == element_to_search) return i;

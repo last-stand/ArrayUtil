@@ -61,9 +61,7 @@ void test_create_should_returns_array_within_structure_with_given_length(){
 
 void test_create_allocates_space_for_INT_array_and_assigns_zero_to_all_bytes(){
 	int intArray[] = {0,0,0,0};
-	expectedUtil.base = intArray;
-	expectedUtil.typeSize = sizeof(int);
-	expectedUtil.length = 4;
+	expectedUtil = (ArrayUtil){intArray,sizeof(int),4};
 	util = create(sizeof(int),4);
 	assertEqual(areEqual(expectedUtil,util),1);
 	dispose(util);
@@ -72,9 +70,7 @@ void test_create_allocates_space_for_INT_array_and_assigns_zero_to_all_bytes(){
 
 void test_create_allocates_space_for_CHAR_array_and_assigns_zero_to_all_bytes(){
 	char charArray[] = {0,0,0,0};
-	expectedUtil.base = charArray;
-	expectedUtil.typeSize = sizeof(char);
-	expectedUtil.length = 4;
+	expectedUtil = (ArrayUtil){charArray,sizeof(char),4};
 	util = create(sizeof(char),4);
 	assertEqual(areEqual(expectedUtil,util),1);
 	dispose(util);
@@ -83,9 +79,7 @@ void test_create_allocates_space_for_CHAR_array_and_assigns_zero_to_all_bytes(){
 
 void test_create_allocates_space_for_FLOAT_array_and_assigns_zero_to_all_bytes(){
 	float floatArray[] = {0,0,0,0};
-	expectedUtil.base = floatArray;
-	expectedUtil.typeSize = sizeof(float);
-	expectedUtil.length = 4;
+	expectedUtil = (ArrayUtil){floatArray,sizeof(float),4};
 	util = create(sizeof(float),4);
 	assertEqual(areEqual(expectedUtil,util),1);
 	dispose(util);
@@ -94,9 +88,7 @@ void test_create_allocates_space_for_FLOAT_array_and_assigns_zero_to_all_bytes()
 
 void test_create_allocates_space_for_DOUBLE_array_and_assigns_zero_to_all_bytes(){
 	double doubleArray[] = {0,0,0,0};
-	expectedUtil.base = doubleArray;
-	expectedUtil.typeSize = sizeof(double);
-	expectedUtil.length = 4;
+	expectedUtil = (ArrayUtil){doubleArray,sizeof(double),4};
 	util = create(sizeof(double),4);
 	assertEqual(areEqual(expectedUtil,util),1);
 	dispose(util);
@@ -104,14 +96,66 @@ void test_create_allocates_space_for_DOUBLE_array_and_assigns_zero_to_all_bytes(
 }
 
 void test_resize_returns_INT_array_within_structure_with_new_allocated_space(){
-	int array1[] = {1,2,3,4}, array2[]={1,2,3,4,0,0};
 	ArrayUtil resizedArray;
-	util = create(sizeof(int),4);
-	util.base = array1;
+	util = (ArrayUtil){(int []){1,2,3,4},sizeof(int),4};
 	resizedArray = resize(util,6);
+	expectedUtil = (ArrayUtil){(int []){1,2,3,4,0,0},sizeof(int),6}; 
+	assertEqual(areEqual(expectedUtil, resizedArray),1);
+	dispose(util);
+	dispose(resizedArray);
+	dispose(expectedUtil);
+}
 
-	expectedUtil = create(sizeof(int),6);
-	expectedUtil.base = array2;
+
+void test_resize_returns_FLOAT_array_within_structure_with_new_allocated_space(){
+	ArrayUtil resizedArray;
+	util = (ArrayUtil){(float []){1.0,2.11111,3.123,4.89},sizeof(float),4};
+	resizedArray = resize(util,6);
+	expectedUtil = (ArrayUtil){(float []){1.0,2.11111,3.123,4.89,0,0},sizeof(float),6};
+	assertEqual(areEqual(expectedUtil, resizedArray),1);
+	dispose(util);
+	dispose(resizedArray);
+	dispose(expectedUtil);
+}
+
+void test_resize_returns_DOUBLE_array_within_structure_with_new_allocated_space(){
+	ArrayUtil resizedArray;
+	util = (ArrayUtil){(double []){1.0,2.11111,3.123,4.89},sizeof(double),4};
+	resizedArray = resize(util,6);
+	expectedUtil = (ArrayUtil){(double []){1.0,2.11111,3.123,4.89,0,0},sizeof(double),6};
+	assertEqual(areEqual(expectedUtil, resizedArray),1);
+	dispose(util);
+	dispose(resizedArray);
+	dispose(expectedUtil);
+}
+
+void test_resize_returns_DOUBLE_array_within_structure_with_new_allocated_space_less_than_previous(){
+	ArrayUtil resizedArray;
+	util = (ArrayUtil){(double []){1.0,2.11111,3.123,4.89},sizeof(double),4};
+	resizedArray = resize(util,2);
+	expectedUtil = (ArrayUtil){(double []){1.0,2.11111},sizeof(double),2};
+	assertEqual(areEqual(expectedUtil, resizedArray),1);
+	dispose(util);
+	dispose(resizedArray);
+	dispose(expectedUtil);
+}
+
+void test_resize_returns_CHAR_array_within_structure_with_new_allocated_space(){
+	ArrayUtil resizedArray;
+	util = (ArrayUtil){(char []){'a','e','i','o'},sizeof(char),4};
+	resizedArray = resize(util,6);
+	expectedUtil = (ArrayUtil){(char []){'a','e','i','o',0,0},sizeof(char),6};
+	assertEqual(areEqual(expectedUtil, resizedArray),1);
+	dispose(util);
+	dispose(resizedArray);
+	dispose(expectedUtil);
+}
+
+void test_resize_returns_CHAR_array_within_structure_with_new_allocated_space_less_than_previous(){
+	ArrayUtil resizedArray;
+	util = (ArrayUtil){(char []){'a','e','i','o','u'},sizeof(char),5};
+	resizedArray = resize(util,2);
+	expectedUtil = (ArrayUtil){(char []){'a','e'},sizeof(char),2};
 	assertEqual(areEqual(expectedUtil, resizedArray),1);
 	dispose(util);
 	dispose(resizedArray);
