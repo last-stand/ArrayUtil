@@ -17,11 +17,10 @@ int areEqual(ArrayUtil a, ArrayUtil b){
 }
 
 ArrayUtil create(int typeSize, int length){
-	void * array = calloc(length,typeSize);
 	ArrayUtil new_array;
 	new_array.length = length;
 	new_array.typeSize = typeSize;
-	new_array.base = array;
+	new_array.base =  calloc(length,typeSize);
 	return new_array;
 }
 
@@ -51,8 +50,7 @@ int findIndex(ArrayUtil util, void* element){
 void dispose(ArrayUtil util){
 	util.typeSize = 0;
 	util.length = 0;
-	util.base = 0;
-	free((void *)util.base);
+	free(util.base);
 }
 
 void* findFirst(ArrayUtil util, MatchFunc* match, void* hint){
