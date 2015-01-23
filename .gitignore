@@ -5,3 +5,4 @@ arrayUtil.exe
 arrayUtilTest.o
 arrayUtilTestRunner.c
 arrayUtilTestRunner.exe
+test.c

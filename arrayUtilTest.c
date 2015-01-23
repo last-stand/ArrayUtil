@@ -12,6 +12,34 @@ int isDivisible(void* hint, void* item){
 	return (*_item % *_hint) == 0 ? 1 : 0;
 }
 
+int isUpperCase(void* a,void *b){
+	return (*((char*)a) >= 'A' && *((char*)a) <= 'Z') ? 1 : 0;
+}
+
+int isEqual(void* hint, void* item){
+	if(*(int*)item==8 ||*(float*)item == 9.0 || *(double*)item==8.9)
+		return 1;
+	return 0;
+}
+
+int compare(void *hint,void* item){
+	if(*(char*)item=='a')
+		return 1;
+	return 0;
+};
+
+int stringCompare(void *hint, void* item){
+	String str ="hello";
+	String getItem = *(String*)item;
+	if(getItem==str)
+		return 1;
+	return 0;
+}
+
+int isEven(void* a,void *b){
+	return (*((int*)b)%2==0) ? 1 : 0;
+}
+
 int match_Func(void* hint, void* item){
 	char* _hint = (char*)hint;
 	char* _item = (char*)item;
@@ -87,6 +115,33 @@ void test_create_allocates_space_for_DOUBLE_array_and_assigns_zero_to_all_bytes(
 	dispose(util);
 }
 
+void test_ArrayUtil_a_and_ArrayUtil_b_are_will_be_equal_by_each_element_typeof_double(){
+	double a [] = {2.34};
+	double b [] = {2.34};
+	ArrayUtil array1 = {a, sizeof(double), 1};
+	ArrayUtil array2 = {b, sizeof(double), 1};
+
+	assert(areEqual(array1,array2));
+};
+
+void test_ArrayUtil_a_and_ArrayUtil_b_are_will_be_equal_by_each_element_typeof_string(){
+	String a [] = {"hello"};
+	String b [] = {"hello"};
+	ArrayUtil array1 = {a, sizeof(String), 1};
+	ArrayUtil array2 = {b, sizeof(String), 1};
+
+	assert(areEqual(array1,array2));
+};
+
+void test_ArrayUtil_a_and_ArrayUtil_b_are_will_not_be_equal_String(){
+	String a [] = {"hallo"};
+	String b [] = {"hello"};
+	ArrayUtil array1 = {a, sizeof(String), 1};
+	ArrayUtil array2 = {b, sizeof(String), 1};
+
+	assertEqual(areEqual(array1,array2),0);
+};
+
 void test_resize_returns_INT_array_within_structure_with_new_allocated_space(){
 	ArrayUtil resizedArray;
 	util = (ArrayUtil){(int []){1,2,3,4},sizeof(int),4};
@@ -156,6 +211,12 @@ void test_findIndex_should_return_negative_1_in_array_if_not_found(){
 	assertEqual(findIndex(util, &y),-1);
 }
 
+void test_findLast_returns_NULL_if_there_is_no_match_in_INTEGER_array(){
+	ArrayUtil a = {(int[]){1,3,5,7,9},sizeof(int),5};
+	int x = 2;
+	assertEqual((int)findLast(a,isEven,&x),(int)NULL);
+}
+
 void test_findFirst_should_return_first_element_of_mathching_CHAR_array(){
 	char array[6] = {'a','e','i','o','u','a'};
 	char x = 'a',*result;
@@ -212,4 +273,101 @@ void test_count_should_count_matched_element_in_DOUBLE_array(){
 	double x = 'a';
 	util = (ArrayUtil){array,sizeof(double),5};
 	assertEqual(count(util,&is_FloorEven,&x),2);
+}
+
+void test_filters_all_numbers_divisible_by_2(){
+	int* destination[5], *base;
+	int result,i,_2 = 2;
+	util = (ArrayUtil){(int[]){21,34,90,17,12},sizeof(int),5};
+	base = (int*)util.base;
+
+	result = filter(util,isDivisible,&_2,(void**)destination,5);
+	assert(3 == result);
+	assert(*destination[0] == 34);
+	assert(*destination[1] == 90);
+	assert(*destination[2] == 12);
+}
+
+void test_filter_will_return_the_array_a_a_a(){
+	char a[]={'a','a','a','b','d'},hint=3;
+	int length;
+	void* result;
+	ArrayUtil array = {a, sizeof(char), 5};
+	length = filter(array,compare,&hint,&result,5);
+
+	assertEqual(((char*)result)[1],'a');
+	assertEqual(length,3);
+};
+
+void test_filter_will_return_the_array_of_8_8_8(){
+	int a[]={1,8,8,7,8,9},hint=3,length;
+	void* result;
+	ArrayUtil array = {a, sizeof(int), 6};
+	length = filter(array,isEqual,&hint,&result,5);
+
+	assertEqual(((int*)result)[0],8);
+	assertEqual(length,3);
+};
+
+void test_filter_will_return_the_array_of_only_two_8(){
+	int a[]={1,8,8,7,8,9},hint=3,length;
+	void* result;
+	ArrayUtil array = {a, sizeof(int), 6};
+	length = filter(array,isEqual,&hint,&result,2);
+
+	assertEqual(((int*)result)[1],8);
+	assertEqual(length,2);
+};
+
+void test_filter_will_return_the_array_of_only_two_8_point_7_in_float(){
+	float a[]={1.4,8.4,8.9,7,8,9.0},hint=3;
+	int length;
+	void* result;
+	ArrayUtil array = {a, sizeof(float), 6};
+	length = filter(array,isEqual,&hint,&result,2);
+
+	assertEqual(((float*)result)[0],9.0);
+	assertEqual(length,1);
+};
+
+void test_filter_will_return_the_array_of_only_one_element_8_point_9_in_double(){
+	double a[]={8.4,8.4,8.9},hint=3.9;
+	int length;
+	void* result;
+	ArrayUtil array = {a, sizeof(double), 3};
+	length = filter(array,isEqual,&hint,&result,2);
+
+	assertEqual(((double*)result)[0],a[2]);
+	assertEqual(length,1);
+};
+
+void test_filter_will_return_the_array_string_contain_hello(){
+	int length,hint=9;
+	void* result,*expected;
+	ArrayUtil array = create(sizeof(String),2);
+	((char**)array.base)[0]="hello";
+	((char**)array.base)[1]="gello";
+	length = filter(array,stringCompare,&hint,&result,2);
+	expected = ((String*)result)[0];
+	
+	assertEqual(length,1);
+	assertEqual(strcmp(expected,"hello"),0);
+};
+
+void test_filter_populate_destination_array_with_evenNumbers(){
+    int maxItem=6;
+    int *evens[maxItem];
+    util = (ArrayUtil){(int[]){101,22,12,13},sizeof(int),4};
+   	 
+	 assertEqual(filter(util,isEven,0,(void**)evens,maxItem),2);
+	 assertEqual(*(evens[0]),22);
+	 assertEqual(*(evens[1]),12);
+}
+void test_filter_populate_destination_array_until_hits_max_size_and_return_no_element_added_to_id(){
+    int *evens [2];
+    util = (ArrayUtil){(int[]){101,22,12,14},sizeof(int),4};   	 
+
+	 assertEqual(filter(util,isEven,0,(void**)evens,2),2);
+	 assertEqual(*(evens[0]),22);
+	 assertEqual(*(evens[1]),12);    
 }

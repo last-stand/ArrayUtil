@@ -4,7 +4,7 @@ struct ArrayUtil {
 	int typeSize;
 	int length;
 };
-
+#define null '\0'
 typedef struct{
 char name[3];
 int roll;
@@ -21,3 +21,4 @@ typedef char* String;
 void* findFirst(ArrayUtil, MatchFunc*, void*);
 void* findLast(ArrayUtil, MatchFunc*, void*);
 int count(ArrayUtil ,MatchFunc*, void*);
+int filter(ArrayUtil, MatchFunc*, void*, void**, int);

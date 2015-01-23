@@ -59,7 +59,7 @@ void* findFirst(ArrayUtil util, MatchFunc* match, void* hint){
 	for(i=0;i<util.length;i++){
 		element = util.base+util.typeSize*i;
 		if(match(hint, element)){
-			return (void*)util.base + (i * util.typeSize);
+			return util.base + (i * util.typeSize);
 		}
 	}
 	return NULL;
@@ -71,7 +71,7 @@ void* findLast(ArrayUtil util, MatchFunc* match, void* hint){
 	for(i=util.length-1;i>=0;i--){
 		element = util.base+util.typeSize*i;
 		if(match(hint,element)){
-			return (void*)util.base + (i*util.typeSize);
+			return util.base + (i*util.typeSize);
 		}
 	}
 	return NULL;
@@ -81,6 +81,20 @@ int count(ArrayUtil util, MatchFunc* match, void* hint){
 	int i,count = 0;
 	for(i=0;i<util.length;i++){
 		count +=  match(hint, util.base + (i*util.typeSize));
+	}
+	return count;
+}
+
+int filter(ArrayUtil util, MatchFunc* match, void* hint, void** destination, int maxItems ){
+	int i,count=0;
+	void* item;
+	for (i = 0; i < util.length && count < maxItems; ++i)
+	{ 
+		item = util.base + (i*util.typeSize);
+		if(match(hint, item)){
+			destination[count] = item;
+			++count;
+		}
 	}
 	return count;
 }
