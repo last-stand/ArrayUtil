@@ -298,6 +298,19 @@ void test_filters_all_numbers_divisible_by_2(){
 	free(destination);
 }
 
+void test_filter_should_filter_those_elements_which_are_matching_given_the_criteria(){
+	int arr[] = {1,2,3,4,5},result,i,expected[] = {2,4};
+	void *destination;
+	util = create(sizeof(int),5);
+	util.base = arr;
+	result = filter(util, isEven, null, &destination, 5);	
+	for (i = 0; i < 2; ++i)
+	{
+		assert(((int*)destination)[i] == expected[i]);
+	}
+	assert(result == 2);
+}
+
 void test_filter_will_return_the_array_a_a_a(){
 	char a[]={'a','a','a','b','d'},hint=3;
 	int length;
@@ -389,4 +402,72 @@ void test_filter_populate_destination_array_until_hits_max_size_and_return_no_el
 	 assertEqual(((int*)evens)[0],22);
 	 assertEqual(((int*)evens)[1],12);
 	 free(evens); 
+}
+
+void add_given_number(void* hint, void* sourceItem, void* destinationItem){
+	*(int*)destinationItem = *(int*)sourceItem + *(int*)hint;
+};
+
+void charConvertFunc(void* hint, void* sourceItem, void* destinationItem){
+	*((char*)destinationItem) = *((char*)sourceItem) - 32;
+}
+
+void multiplyBy(void* hint, void* sourceItem, void* destinationItem){
+    *(int*)destinationItem = *(int*)sourceItem * *(int*)(hint);
+}
+
+void square_elements(void *hint, void *sourceItem, void *destinationItem){
+	*(int*)destinationItem=*(int*)sourceItem * *(int*)sourceItem;
+}
+
+void test_map_should_add_given_number_to_each_elemeny_in_INT_array(){
+	ArrayUtil src,dest;
+	int hint = 3;
+	int i,result;
+	expectedUtil = (ArrayUtil){(int[]){4,5,6,7,8},sizeof(int),5};
+	src = create(sizeof(int),5);
+	for(i=0;i<5;i++)
+		*((int*)src.base+i) = i+1;
+	dest = create(sizeof(int),5);
+	map(src,dest,add_given_number,&hint);
+	result = areEqual(expectedUtil,dest);
+	assert(result);
+}
+
+void test_map_gives_2_3_4_5_6_for_1_2_3_4_5_for_integer_array(){
+	ArrayUtil src = {(int[]){1,2,3,4,5},sizeof(int),5},dest = create(sizeof(int),5);
+	ArrayUtil tmp = {(int[]){2,3,4,5,6},sizeof(int),5};
+	int hint = 1;
+	map(src,dest,add_given_number,&hint);
+	assert(areEqual(dest,tmp)==1);
+	dispose(dest);
+}
+
+void test_map_gives_A_B_C_D_E_for_a_b_c_d_e_for_character_array(){
+	ArrayUtil src = {(char[]){'a','b','c','d','e'},sizeof(char),5},dest = create(sizeof(char),5);
+	ArrayUtil tmp = {(char[]){'A','B','C','D','E'},sizeof(char),5};
+	char hint = 32;
+	map(src,dest,charConvertFunc,&hint);
+	assertEqual(areEqual(dest,tmp),1);
+	dispose(dest);
+}
+void test_map_converts_each_element_source_array_and_put_it_to_destination_array(){
+    int hint =10;
+    ArrayUtil util2;
+    expectedUtil=(ArrayUtil){(int[]){10,20,30,40,50},sizeof(int),5};
+    util=(ArrayUtil){(int[]){1,2,3,4,5},sizeof(int),5};
+    util2 =create(sizeof(int),5);
+    
+    map(util,util2,multiplyBy,&hint);
+    assert(areEqual(expectedUtil, util2));
+}
+
+void test_map_returns_square_of_each_element_in_array(){
+	void *hint;
+	int array[]={1,2,3,4,5}, newArray[]={1,4,9,16,25};
+	ArrayUtil mapped={calloc(5,sizeof(int)),sizeof(int),5};
+	util = (ArrayUtil){array,sizeof(int),5};
+	expectedUtil = (ArrayUtil){newArray,sizeof(int),5};
+	map(util,mapped,square_elements,&hint);
+	assert(areEqual(expectedUtil, mapped));
 }
