@@ -115,6 +115,15 @@ void test_create_allocates_space_for_DOUBLE_array_and_assigns_zero_to_all_bytes(
 	dispose(util);
 }
 
+void test_create_Structures_with_all_fields_NULL(){
+	student temp = {"",0,0.0};
+	student Student[1] = {temp};
+	ArrayUtil expected = {Student,sizeof(student),1};
+	util = create(sizeof(student),1);
+	assert(areEqual(expected,util));
+};
+
+
 void test_ArrayUtil_a_and_ArrayUtil_b_are_will_be_equal_by_each_element_typeof_double(){
 	double a [] = {2.34};
 	double b [] = {2.34};
@@ -276,16 +285,17 @@ void test_count_should_count_matched_element_in_DOUBLE_array(){
 }
 
 void test_filters_all_numbers_divisible_by_2(){
-	int* destination[5], *base;
+	int *base;
 	int result,i,_2 = 2;
+	void *destination; 
 	util = (ArrayUtil){(int[]){21,34,90,17,12},sizeof(int),5};
-	base = (int*)util.base;
-
-	result = filter(util,isDivisible,&_2,(void**)destination,5);
+	base = util.base;
+	result = filter(util,isDivisible,&_2,&destination,5);
 	assert(3 == result);
-	assert(*destination[0] == 34);
-	assert(*destination[1] == 90);
-	assert(*destination[2] == 12);
+	assert(((int*)destination)[0] == 34);
+	assert(((int*)destination)[1] == 90);
+	assert(((int*)destination)[2] == 12);
+	free(destination);
 }
 
 void test_filter_will_return_the_array_a_a_a(){
@@ -297,6 +307,7 @@ void test_filter_will_return_the_array_a_a_a(){
 
 	assertEqual(((char*)result)[1],'a');
 	assertEqual(length,3);
+	free(result);
 };
 
 void test_filter_will_return_the_array_of_8_8_8(){
@@ -307,6 +318,7 @@ void test_filter_will_return_the_array_of_8_8_8(){
 
 	assertEqual(((int*)result)[0],8);
 	assertEqual(length,3);
+	free(result);
 };
 
 void test_filter_will_return_the_array_of_only_two_8(){
@@ -317,6 +329,7 @@ void test_filter_will_return_the_array_of_only_two_8(){
 
 	assertEqual(((int*)result)[1],8);
 	assertEqual(length,2);
+	free(result);
 };
 
 void test_filter_will_return_the_array_of_only_two_8_point_7_in_float(){
@@ -328,6 +341,7 @@ void test_filter_will_return_the_array_of_only_two_8_point_7_in_float(){
 
 	assertEqual(((float*)result)[0],9.0);
 	assertEqual(length,1);
+	free(result);
 };
 
 void test_filter_will_return_the_array_of_only_one_element_8_point_9_in_double(){
@@ -339,6 +353,7 @@ void test_filter_will_return_the_array_of_only_one_element_8_point_9_in_double()
 
 	assertEqual(((double*)result)[0],a[2]);
 	assertEqual(length,1);
+	free(result);
 };
 
 void test_filter_will_return_the_array_string_contain_hello(){
@@ -352,22 +367,26 @@ void test_filter_will_return_the_array_string_contain_hello(){
 	
 	assertEqual(length,1);
 	assertEqual(strcmp(expected,"hello"),0);
+	free(result);
 };
 
 void test_filter_populate_destination_array_with_evenNumbers(){
-    int maxItem=6;
-    int *evens[maxItem];
+    int maxItem=6,result;
+    void *evens;
     util = (ArrayUtil){(int[]){101,22,12,13},sizeof(int),4};
-   	 
-	 assertEqual(filter(util,isEven,0,(void**)evens,maxItem),2);
-	 assertEqual(*(evens[0]),22);
-	 assertEqual(*(evens[1]),12);
+    result = filter(util,isEven,0,&evens,maxItem);
+	assertEqual(result,2);
+	assertEqual(((int*)evens)[0],22);
+	assertEqual(((int*)evens)[1],12);
+	free(evens);
 }
+
 void test_filter_populate_destination_array_until_hits_max_size_and_return_no_element_added_to_id(){
-    int *evens [2];
+    void *evens;
     util = (ArrayUtil){(int[]){101,22,12,14},sizeof(int),4};   	 
 
-	 assertEqual(filter(util,isEven,0,(void**)evens,2),2);
-	 assertEqual(*(evens[0]),22);
-	 assertEqual(*(evens[1]),12);    
+	 assertEqual(filter(util,isEven,0,&evens,2),2);
+	 assertEqual(((int*)evens)[0],22);
+	 assertEqual(((int*)evens)[1],12);
+	 free(evens); 
 }

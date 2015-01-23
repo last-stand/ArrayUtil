@@ -6,9 +6,9 @@ struct ArrayUtil {
 };
 #define null '\0'
 typedef struct{
-char name[3];
-int roll;
-float percentage;
+	char name[3];
+	int roll;
+	float percentage;
 } student;
 
 int areEqual(ArrayUtil, ArrayUtil);

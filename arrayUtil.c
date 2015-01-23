@@ -88,11 +88,12 @@ int count(ArrayUtil util, MatchFunc* match, void* hint){
 int filter(ArrayUtil util, MatchFunc* match, void* hint, void** destination, int maxItems ){
 	int i,count=0;
 	void* item;
+	*destination = calloc(maxItems,util.typeSize);
 	for (i = 0; i < util.length && count < maxItems; ++i)
 	{ 
 		item = util.base + (i*util.typeSize);
 		if(match(hint, item)){
-			destination[count] = item;
+			memcpy(&((*destination)[count*util.typeSize]),item,util.typeSize);
 			++count;
 		}
 	}
