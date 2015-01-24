@@ -10,7 +10,7 @@ int areEqual(ArrayUtil a, ArrayUtil b){
 	if(a.length != b.length || a.typeSize != b.typeSize)
 		return 0;
 	for(i=0;i<a.length;i++){
-		if(a_array[i] != b_array[i])
+		if(a_array[i*a.typeSize] != b_array[i*b.typeSize])
 			return 0;
 	}
 	return 1;
@@ -36,13 +36,14 @@ ArrayUtil resize(ArrayUtil util, int length) {
 	return util;
 }
 
-int findIndex(ArrayUtil util, void* element){
-	char *array = util.base,*item;
-	int i;
-	char element_to_search = *(char*)element;
-	for(i=0;i<util.length;i++){
-		item = util.base+util.typeSize*i;
-		if(*item == element_to_search) return i;
+int findIndex(ArrayUtil util,void* element)
+{
+	int i,exist,*item;
+	for(i=0;i<util.length;i++)
+	{
+		item = util.base+(util.typeSize*i);
+		exist = memcmp(item,element,util.typeSize);
+		if(exist==0) return i;
 	}
 	return -1;
 }

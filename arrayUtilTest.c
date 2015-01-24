@@ -220,6 +220,34 @@ void test_findIndex_should_return_negative_1_in_array_if_not_found(){
 	assertEqual(findIndex(util, &y),-1);
 }
 
+void test_findIndex_returns_index_of_the_String_element_where_it_presents(){
+    String array1[] = {"Mahesh","Kumar","Kolla"};
+    String element = "Kumar";
+    util = (ArrayUtil){array1,sizeof(String),3};
+    assertEqual(findIndex(util,&element), 1);
+}
+
+void test_findIndex_returns_index_of_the_char_element_where_it_presents(){
+    char array1[] = {'m','a','h','e','s','h'};
+    char element = 's';
+    util = (ArrayUtil){array1,sizeof(char),6};
+    assertEqual(findIndex(util,&element), 4);
+}
+
+void test_findIndex_returns_index_of_the_float_element_where_it_presents(){
+    float array1[] = {1.1,2.2,3.3,4.4};
+    float element = 4.4;
+    util = (ArrayUtil){array1,sizeof(float),4};
+    assertEqual(findIndex(util,&element), 3);
+}
+
+void test_findIndex_returns_index_of_the_integer_element_where_it_presents(){
+    int array1[] = {1,2,3,4,5};
+    int element = 2;
+    util = (ArrayUtil){array1,sizeof(int),5};
+    assertEqual(findIndex(util,&element), 1);
+}
+
 void test_findLast_returns_NULL_if_there_is_no_match_in_INTEGER_array(){
 	ArrayUtil a = {(int[]){1,3,5,7,9},sizeof(int),5};
 	int x = 2;
