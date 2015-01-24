@@ -104,8 +104,16 @@ int filter(ArrayUtil util, MatchFunc* match, void* hint, void** destination, int
 void map(ArrayUtil source, ArrayUtil destination, ConvertFunc* convert, void* hint){
 	int i;
 	void *sourceItem = source.base, *destinationItem = destination.base;
-	for (i = 0; i < source.length; ++i)
-	{
+	for (i = 0; i < source.length; ++i){
 		convert(hint, &sourceItem[i*source.typeSize], &destinationItem[i*destination.typeSize]);
+	}
+};
+
+void forEach(ArrayUtil util, OperationFunc* operation, void* hint){
+	int i;
+	void **item;
+	for (i = 0; i < util.length; ++i){
+		item = util.base + (util.typeSize*i);
+		operation(hint,item);
 	}
 };

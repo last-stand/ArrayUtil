@@ -2,6 +2,7 @@
 #include "arrayUtil.h"
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <math.h>
 
 ArrayUtil util,expectedUtil;
@@ -63,6 +64,15 @@ void test_array_util_areEqual_returns_1_if_both_array_are_equal_in_length_and_el
 	ArrayUtil a_array = {a,sizeof(int),5}, b_array = a_array;
 	assertEqual(areEqual(a_array, b_array),1);
 }
+
+void test_areEqual_returns_0_when_length_is_equal_but_typeSize_is_not_equal(){
+	int array1[]={1,2,3,4,5};
+	char array2[]={'a','b','c','d','\0'};
+	ArrayUtil u1={array1,sizeof(int),5};
+	ArrayUtil u2={array2,sizeof(char),5};
+	assertEqual(areEqual(u1,u2), 0);
+}
+
 
 void test_array_util_areEqual_returns_0_if_both_array_are_not_equal_in_length_and_elements(){
 	int a[]={0,3,8,5,2,3,4,5}, b[]={1,5,2,3,7};
@@ -217,7 +227,7 @@ void test_findIndex_should_return_negative_1_in_array_if_not_found(){
 	int x = 7,y=9;
 	util = (ArrayUtil){(int []){4,2,1,5,6,0},sizeof(int),6};
 	assertEqual(findIndex(util, &x),-1);
-	assertEqual(findIndex(util, &y),-1);
+	assertEqual(findIndex(util, &y),-1); 
 }
 
 void test_findIndex_returns_index_of_the_String_element_where_it_presents(){
@@ -493,9 +503,54 @@ void test_map_converts_each_element_source_array_and_put_it_to_destination_array
 void test_map_returns_square_of_each_element_in_array(){
 	void *hint;
 	int array[]={1,2,3,4,5}, newArray[]={1,4,9,16,25};
-	ArrayUtil mapped={calloc(5,sizeof(int)),sizeof(int),5};
+	util=(ArrayUtil){calloc(5,sizeof(int)),sizeof(int),5};
 	util = (ArrayUtil){array,sizeof(int),5};
 	expectedUtil = (ArrayUtil){newArray,sizeof(int),5};
-	map(util,mapped,square_elements,&hint);
-	assert(areEqual(expectedUtil, mapped));
+	map(util,util,square_elements,&hint);
+	assert(areEqual(expectedUtil, util));
+}
+
+void square(void* hint, void* item){
+	*(int*)item = (*(int*)item)*(*(int*)item);
+};
+
+void charToUpper(void* hint, void* item){
+	*(char*)item = toupper(*(char*)item);
+}
+
+void float_increment(void* hint, void* item){
+	*(float*)item = (*(float*)item)+(*(float*)hint);
+}
+
+void test_forEach_should_do_square_of_all_elements_of_INTEGER_array(){
+	int array[5] = {4,5,6,7,8},i;
+	util = (ArrayUtil){array,sizeof(int),5};
+	forEach(util,square,null);
+	for (i = 0; i < util.length; ++i)
+	{
+		assertEqual(pow(i+4,2),array[i]);
+	}
+}
+
+void test_forEach_should_increment_all_elements_by_given_hint_of_FLOAT_array(){
+	float array[5] = {4.12,5.00,6.1243,7.5436,8.7854},hint = 2.3096;
+	int i;
+	util = (ArrayUtil){array,sizeof(float),5};
+	forEach(util,float_increment,&hint);
+		assertEqual((float)6.429600,array[0]);
+		assertEqual((float)7.309600,array[1]);
+		assertEqual((float)8.433900,array[2]);
+		assertEqual((float)9.853200,array[3]);
+		assertEqual((float)11.095000,array[4]);
+}
+
+void test_forEach_should_convert_alphabets_in_upperCase_of_CHAR_array(){
+	char array[5] = {'a','e','I','o','U'};
+	util = (ArrayUtil){array,sizeof(char),5};
+	forEach(util,charToUpper,null);
+	assertEqual('A',array[0]);
+	assertEqual('E',array[1]);
+	assertEqual('I',array[2]);
+	assertEqual('O',array[3]);
+	assertEqual('U',array[4]);
 }
