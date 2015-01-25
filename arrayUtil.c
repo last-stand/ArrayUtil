@@ -111,7 +111,7 @@ void map(ArrayUtil source, ArrayUtil destination, ConvertFunc* convert, void* hi
 
 void forEach(ArrayUtil util, OperationFunc* operation, void* hint){
 	int i;
-	void **item;
+	void *item;
 	for (i = 0; i < util.length; ++i){
 		item = util.base + (util.typeSize*i);
 		operation(hint,item);
