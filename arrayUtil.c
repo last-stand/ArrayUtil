@@ -117,3 +117,13 @@ void forEach(ArrayUtil util, OperationFunc* operation, void* hint){
 		operation(hint,item);
 	}
 };
+
+void* reduce(ArrayUtil util, ReducerFunc* reducer, void* hint, void* intialValue){
+	int i;
+	void *previousItem = intialValue,*item;
+	for (i = 0; i < util.length; ++i){
+		item = util.base + (util.typeSize*i);
+		previousItem = reducer(hint, previousItem, item);
+	}
+	return previousItem;
+};

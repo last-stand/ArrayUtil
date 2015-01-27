@@ -554,3 +554,59 @@ void test_forEach_should_convert_alphabets_in_upperCase_of_CHAR_array(){
 	assertEqual('O',array[3]);
 	assertEqual('U',array[4]);
 }
+
+void *add_all(void* hint, void* previousItem, void* item){
+	*((int*)item)= *((int*)previousItem) + *((int*)item);
+	return ((int*)item);
+}
+
+
+void test_reduce_gives_15_when_elements_are_1_2_3_4_5_and_initial_value_is_0(){
+	int intialValue=0;
+	int array[]={1,2,3,4,5};
+	ArrayUtil util={array,sizeof(int),5};
+	void *return_value=reduce(util,add_all,null,&intialValue);
+	assertEqual(*((int*)return_value),15);
+}
+
+void test_reduce_gives_30_when_elements_are_1_2_3_4_5_and_initial_value_is_15(){
+	int intialValue=15;
+	int array[]={1,2,3,4,5};
+	ArrayUtil util={array,sizeof(int),5};
+	void *return_value=reduce(util,add_all,null,&intialValue);
+	assertEqual(*((int*)return_value),30);
+}
+
+void test_reduce_returns_sum_of_all_integers_of_array (){
+	int hint = 2,result;
+	int initial_value = 0;
+	int array[] = {1,2,3};
+	ArrayUtil util = create(sizeof(int),3);
+	util.base = (void*)array;
+	result = *(int*)reduce(util,add_all,(void*)&hint,(void*)&initial_value);
+	assertEqual(result,6);
+}
+
+void* float_add_all(void* hint, void* previousItem, void* item){
+	*((float*)item)= *((float*)previousItem) + *((float*)item);
+	return ((float*)item);
+}
+
+void test_reduce_float_should_return_sum_of_all_elemnts_including_initial_value(){
+	float intialValue=100.85671;
+	float array[5] = {0.000314,2.3412,9.076,99.999,5.8970};
+	util=(ArrayUtil){array,sizeof(float),5};
+	assertEqual(*(float*)reduce(util,float_add_all,null,&intialValue),(float)218.170227);
+}
+
+void* greatest_char(void* hint, void* previousItem, void* item){
+	void *result = (*((char*)previousItem) > *((char*)item)) ? previousItem : item;
+	return result;
+}
+
+void test_reduce_char_should_return_greatest_character_in_given_STRING(){
+	char intialValue='A';
+	char array[] = "Mujhe peene ka shock nahin";
+	util=(ArrayUtil){array,sizeof(char),strlen(array)};
+	assertEqual(*(char*)reduce(util,greatest_char,null,&intialValue),'u');
+}
