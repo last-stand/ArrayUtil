@@ -105,7 +105,7 @@ void map(ArrayUtil source, ArrayUtil destination, ConvertFunc* convert, void* hi
 	int i;
 	void *sourceItem = source.base, *destinationItem = destination.base;
 	for (i = 0; i < source.length; ++i){
-		convert(hint, &sourceItem[i*source.typeSize], &destinationItem[i*destination.typeSize]);
+			convert(hint, &sourceItem[i*source.typeSize], &destinationItem[i*destination.typeSize]);
 	}
 };
 
