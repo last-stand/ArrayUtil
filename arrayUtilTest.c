@@ -1108,47 +1108,55 @@ void test_create_008(){
 	assertEqual(areEqual(util1, util2), 1);
 	dispose(util2);
 }
-// void test_create_009(){
-// 	log("returns an ArrayUtil with bytes initialized to ZERO for void *");
-// 	ArrayUtil util1 = {array_void_stars, sizeOf_void_star, 1};
-// 	ArrayUtil util2 = create(sizeOf_void_star, 1);
-// 	assertEqual(areEqual(util1, util2), 1);
-// 	dispose(util2);
-// }
-// void test_create_010(){
-// 	log("returns an ArrayUtil with bytes initialized to ZERO for char *");
-// 	ArrayUtil util1 = {array_char_stars, sizeOf_char_star, 1};
-// 	ArrayUtil util2 = create(sizeOf_char_star, 1);
-// 	assertEqual(areEqual(util1, util2), 1);
-// 	dispose(util2);
-// }
-// void test_create_011(){
-// 	log("returns an ArrayUtil with bytes initialized to ZERO for int *");
-// 	ArrayUtil util1 = {array_int_stars, sizeOf_int_star, 1};
-// 	ArrayUtil util2 = create(sizeOf_int_star, 1);
-// 	assertEqual(areEqual(util1, util2), 1);
-// 	dispose(util2);
-// }
-// //findFirst and findLas with STRUCT>>>>>
-// Student array_3_Students[3] = {{"Abu", 2, 88.5},{"Babu", 2, 98.25},{"Cbabu", 2, 68.0}};
-// int hasPassed(void* hint, void *item){
-// 	Student student = *(Student*)item;
-// 	float passMark = *(float*)hint;
-// 	return (student.percentage >= passMark);
-// }
-// void test_findLast_returns_the_last_student_who_has_passed_the_exam_struct_array(){
-// 	ArrayUtil a = {array_3_Students,sizeof(Student),3};
-// 	Student *got;
-// 	String name;
-// 	float passMark = 80.0;
-// 	got = (Student*)findLast(a,hasPassed,&passMark);
-// 	assertEqual(strcmp((*got).name,"Babu"),0);
-// }
-// void test_findFirst_returns_the_first_student_who_has_passed_the_exam_struct_array(){
-// 	ArrayUtil a = {array_3_Students,sizeof(Student),3};
-// 	Student *got;
-// 	String name;
-// 	float passMark = 80.0;
-// 	got = (Student*)findFirst(a,hasPassed,&passMark);
-// 	assertEqual(strcmp((*got).name,"Abu"),0);
-// }
+void test_create_009(){
+	log("returns an ArrayUtil with bytes initialized to ZERO for void *");
+	typedef void *void_star;
+	void_star array_void_stars[1] = {0x0};
+	ArrayUtil util1 = {array_void_stars, sizeof(void_star), 1};
+	ArrayUtil util2 = create(sizeof(void_star), 1);
+	assertEqual(areEqual(util1, util2), 1);
+	dispose(util2);
+}
+void test_create_010(){
+	log("returns an ArrayUtil with bytes initialized to ZERO for char *");
+	typedef char *char_star;
+	char_star array_char_stars[1] = {(char *)('\0')};
+	ArrayUtil util1 = {array_char_stars, sizeof(char_star), 1};
+	ArrayUtil util2 = create(sizeof(char_star), 1);
+	assertEqual(areEqual(util1, util2), 1);
+	dispose(util2);
+}
+void test_create_011(){
+	log("returns an ArrayUtil with bytes initialized to ZERO for int *");
+	typedef int *int_star;
+	int_star array_int_stars[1] = {(int *)(0)};
+	ArrayUtil util1 = {array_int_stars, sizeof(int_star), 1};
+	ArrayUtil util2 = create(sizeof(int_star), 1);
+	assertEqual(areEqual(util1, util2), 1);
+	dispose(util2);
+}
+
+ //findFirst and findLas with STRUCT>>>>>
+typedef struct Stud { char name[27]; int std; float percentage; } Student_siddhu;
+Student_siddhu array_3_Students[3] = {{"Abu", 2, 88.5},{"Babu", 2, 98.25},{"Cbabu", 2, 68.0}};
+int hasPassed(void* hint, void *item){
+	Student_siddhu student = *(Student_siddhu*)item;
+	float passMark = *(float*)hint;
+	return (student.percentage >= passMark);
+}
+void test_findLast_returns_the_last_student_who_has_passed_the_exam_struct_array(){
+	ArrayUtil a = {array_3_Students,sizeof(Student_siddhu),3};
+	Student_siddhu *got;
+	String name;
+	float passMark = 80.0;
+	got = (Student_siddhu*)findLast(a,hasPassed,&passMark);
+	assertEqual(strcmp((*got).name,"Babu"),0);
+}
+void test_findFirst_returns_the_first_student_who_has_passed_the_exam_struct_array(){
+	ArrayUtil a = {array_3_Students,sizeof(Student_siddhu),3};
+	Student_siddhu *got;
+	String name;
+	float passMark = 80.0;
+	got = (Student_siddhu*)findFirst(a,hasPassed,&passMark);
+	assertEqual(strcmp((*got).name,"Abu"),0);
+}
